@@ -14,7 +14,7 @@ boxplot.bili <- ggplot(bili.df, aes(x= pers, y = log(meas),fill=pers)) +
 boxplot.bili
 ## ---- break
 ggsave("../figures/boxplot_bili.pdf", plot = boxplot.bili, device = NULL, 
-       path = NULL,scale = 1, width = 5.5, height = 2*4, 
+       path = NULL,scale = 1, width = 5.5, height = 5.5, 
        units = "in",dpi = 300, limitsize = TRUE)
 
 ## ---- linearReg2
