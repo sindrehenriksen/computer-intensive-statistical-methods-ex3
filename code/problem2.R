@@ -14,7 +14,7 @@ boxplot.bili <- ggplot(bili.df, aes(x= pers, y = log(meas),fill=pers)) +
 boxplot.bili
 ## ---- break
 ggsave("../figures/boxplot_bili.pdf", plot = boxplot.bili, device = NULL, 
-       path = NULL,scale = 1, width = 5.5, height = 5.5, 
+       path = NULL,scale = 1, width = 5.5, height = 2*4, 
        units = "in",dpi = 300, limitsize = TRUE)
 
 ## ---- linearReg2
@@ -24,6 +24,14 @@ log.y <- lm(log(meas)~pers,data=bili.df)
 sum.log.y <- summary(log.y)
 # fetching f.statistics
 Fval <- as.numeric(sum.log.y$fstatistic[1])
+cat("F-statistic of the test:", Fval)
+
+## ---- break
+save(file = "../data/variables/fstat.Rdata", Fval)
+
+## ---- printFval
+load(file = "../data/variables/fstat.Rdata")
+cat("F-statistic of the test:", Fval)
 
 ## ---- permTest
 permTest <- function(bili.df){
