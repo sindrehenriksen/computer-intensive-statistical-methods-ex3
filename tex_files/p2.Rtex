@@ -38,7 +38,13 @@ read_chunk("../code/problem2.R")
 <<permutationTest, eval=FALSE>>==
 @
 % 
+\begin{figure}
+    \centering
+    \includegraphics[width=0.7\textwidth]{figures/his_fstat.pdf}
+    \caption{}
+    \label{fig:his_fstat}
+\end{figure}
 %
-<<printPval, eval=FALSE>>==
+<<printPval, echo=FALSE>>==
 @
 %  
