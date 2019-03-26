@@ -30,24 +30,31 @@ We did a linear regression using the function \texttt{lm} from \textbf{R} to fit
     \label{eq:linmod2}
 \end{equation*}
 We want to do a F-test on the hypothesis $\beta_1 = \beta_2 = \beta_3$, which is done by the hypothesis test
-\begin{equation*}
+\begin{equation}
     \begin{array}{rl}
         H_0: & \beta_1 = \beta_2 = \beta_3 \\
         H_1: & \beta_1 \neq \beta_2 \neq \beta_3.
     \end{array}
-\end{equation*}
-The code for the linear regression is shown bellow, where we get the \texttt{Fval} from the \texttt{summary.lm} function. 
+    \label{eq:ftest}
+\end{equation}
+The code for the linear regression is shown bellow, where we get the F-statistics of the observed data $F_{\mathrm{obs}}$ from the \texttt{summary.lm} function and we store it in \texttt{Fval}.
 %
 <<linearReg2, eval=FALSE>>==
 @
 %
 \paragraph{(2.)}
+In the \texttt{permTest} function a data frame of the \textit{bilirubin} data is the only input. It creates a temporary data frame and then changes the order of the grouping in the \texttt{\$pers} column, to create a permutation of the data. Then be the same method used in \textbf{1.} we calculate and return the F-statistic.
 %
 <<permTest, eval=FALSE>>==
 @
 %  
 
 \paragraph{(3.)}
+Now we are ready to implement a permutation test using the function created in \textbf{2.} on $N = 999$ different permutations. The returned F-statistics $F_i; i\in[1,N]$ can then be used to calculate the p-value of the F-test shown in Equation \eqref{eq:ftest}. The p-value is calculated by the equation
+\begin{equation*}
+    \textrm{p-value} = \frac{\sum\limits_{i=1}^N I(F_i>=F_{\textrm{obs}})}{N},
+\end{equation*}
+where $I(A) = 1$ if $A$ is true and $0$ otherwise. A histogram of the F-statistics from the permutations is shown in Figure \ref{fig:his_fstat}. Here one can see that most of the F-values are bellow the red line, which is the F-value of the bilirubin data, which also is a indication that the p-value is small. Our implementation of the permutation test is shown bellow, and the p-value is printed. 
 %
 <<permutationTest, eval=FALSE>>==
 @
@@ -55,10 +62,10 @@ The code for the linear regression is shown bellow, where we get the \texttt{Fva
 \begin{figure}
     \centering
     \includegraphics[width=0.7\textwidth]{figures/his_fstat.pdf}
-    \caption{}
+    \caption{A histogram of the F-statistics from $N=999$ permutations. The red line is the F-statistic of bilirubin data.}
     \label{fig:his_fstat}
 \end{figure}
 %
 <<printPval, echo=FALSE>>==
 @
-%  
+%
