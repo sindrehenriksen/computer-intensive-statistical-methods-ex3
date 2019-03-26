@@ -14,7 +14,7 @@ boxplot.bili <- ggplot(bili.df, aes(x= pers, y = log(meas),fill=pers)) +
 boxplot.bili
 ## ---- break
 ggsave("../figures/boxplot_bili.pdf", plot = boxplot.bili, device = NULL, 
-       path = NULL,scale = 1, width = 5.5, height = 2*4, 
+       path = NULL,scale = 1, width = 5.5, height = 5.5, 
        units = "in",dpi = 300, limitsize = TRUE)
 
 ## ---- linearReg2
@@ -24,19 +24,17 @@ log.y <- lm(log(meas)~pers,data=bili.df)
 sum.log.y <- summary(log.y)
 # fetching f.statistics
 Fval <- as.numeric(sum.log.y$fstatistic[1])
-cat("F-statistic of the test:", Fval)
-
+cat("F-statistic:", Fval)
 ## ---- break
 save(file = "../data/variables/fstat.Rdata", Fval)
-
 ## ---- printFval
 load(file = "../data/variables/fstat.Rdata")
-cat("F-statistic of the test:", Fval)
+cat("F-statistic:", Fval)
 
 ## ---- permTest
 permTest <- function(bili.df){
   # temporary dataframe
-  bili.p.df = bili.df
+    bili.p.df = bili.df
   # permutation on the grouping column
   bili.p.df$pers = bili.df$pers[sample(1:nrow(bili.p.df))]
   # return of summary.lm and fetching the fstat
@@ -45,6 +43,7 @@ permTest <- function(bili.df){
   }
 
 ## ---- permutationTest
+set.seed(420)
 N <- 999
 Fvals <- vector()
 # running the 999 permutions in permTest
