@@ -6,11 +6,12 @@ read_chunk("../code/problem2.R")
 \label{sec:p2}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \paragraph{(1.)}
+The data used in this problem is the '\textit{bilirubin.txt}' data set. It contains bilirubin levels in the blood of three different persons. It is imported in the code bellow and we used the \textbf{tidyverse}-package to create plots and data frames.
 %
 <<labsdata2, eval=FALSE>>==
 @
 %
-
+A box plot of the \textit{bilirubin} data set is shown in Figure \ref{fig:boxplot_bili}. This shows that values from person 'p1' is almost the same as for person 'p2', but is diverging for person 'p3'.
 %
 <<boxplot.bili, eval=FALSE>>==
 @
@@ -19,10 +20,23 @@ read_chunk("../code/problem2.R")
 \begin{figure}
     \centering
     \includegraphics[width=0.7\textwidth]{figures/boxplot_bili.pdf}
-    \caption{}
+    \caption{A boxplot of the bilirubin data. On the y-axis the logarithm of the concentration of bilirubin in the blood of three different persons that are grouped on the x-axis.}
     \label{fig:boxplot_bili}
 \end{figure}
 
+We did a linear regression using the function \texttt{lm} from \textbf{R} to fit the linear model
+\begin{equation*}
+    log(\matr{Y}_{ij}) = \beta_i + \epsilon_{ij};\enspace i = 1, 2, 3, \enspace j = 1, ..., n_i, \enspace \epsilon_{ij}\overset{\mathrm{iid}}{\sim} \N(0,\sigma^2).
+    \label{eq:linmod2}
+\end{equation*}
+We want to do a F-test on the hypothesis $\beta_1 = \beta_2 = \beta_3$, which is done by the hypothesis test
+\begin{equation*}
+    \begin{array}{rl}
+        H_0: & \beta_1 = \beta_2 = \beta_3 \\
+        H_1: & \beta_1 \neq \beta_2 \neq \beta_3.
+    \end{array}
+\end{equation*}
+The code for the linear regression is shown bellow, where we get the \texttt{Fval} from the \texttt{summary.lm} function. 
 %
 <<linearReg2, eval=FALSE>>==
 @
