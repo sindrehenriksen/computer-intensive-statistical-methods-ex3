@@ -120,6 +120,6 @@ for(i in 1:length(nums2)){
 
 ## ---- save
 save(beta_la, beta_ls,
-     beta_hat_la_bias, beta_hat_la_mean,
-     beta_hat_ls_bias, beta_hat_ls_mean,
+     beta_hat_la_bias, beta_hat_ls_bias,
+     beta_hat_la_var, beta_hat_ls_var,
      file="../data/p1.Rdata")
