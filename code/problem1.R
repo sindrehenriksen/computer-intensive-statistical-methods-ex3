@@ -20,7 +20,7 @@ epsilon_ls = ARp.resid(data3A$x, beta_ls)
 
 ## ---- p11_sim
 # AR residual resampling method
-ARp.rrbootstrap = function(x, beta, e){
+AR2.rrbootstrap = function(x, beta, e){
   i = sample(1:99, 1)
   x0 = x[i:(i + 1)]
   return(ARp.filter(x0, beta, sample(e, replace=T)))
@@ -30,9 +30,9 @@ ARp.rrbootstrap = function(x, beta, e){
 B = 2000
 m = length(data3A$x)
 x_hat_la = t(replicate(
-  B, ARp.rrbootstrap(data3A$x, beta_la, epsilon_la)))
+  B, AR2.rrbootstrap(data3A$x, beta_la, epsilon_la)))
 x_hat_ls = t(replicate(
-  B, ARp.rrbootstrap(data3A$x, beta_ls, epsilon_ls)))
+  B, AR2.rrbootstrap(data3A$x, beta_ls, epsilon_ls)))
 
 # Plot some of the samples and original data
 data = tibble(x=data3A$x, t=1:100)
@@ -49,8 +49,8 @@ for(i in 1:length(nums)){
       (aes(col="LS"))) +
     labs(col="")
 }
-ggsave("../figures/p1_time_series.pdf", p_time_series,
-       width=5, height=3, units="in")
+# ggsave("../figures/p1_time_series.pdf", p_time_series,
+#        width=5, height=3, units="in")
 
 ## ---- p11_stats
 # Bootstrap samples parameter estimates
@@ -115,5 +115,10 @@ for(i in 1:length(nums2)){
       aes(t, x, col="LS"), shape="x", size=2) +
     labs(col="")
 }
-ggsave("../figures/p1_preds.pdf", p_preds,
-       width=5, height=3, units="in")
+# ggsave("../figures/p1_preds.pdf", p_preds,
+#        width=5, height=3, units="in")
+
+## ---- save
+save(beta_hat_la_bias, beta_hat_la_mean, beta_hat_ls_bias,
+     beta_hat_ls_mean,
+     file="../data/p1.Rdata")
