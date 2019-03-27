@@ -1,0 +1,33 @@
+\section{}
+\label{sec:p1}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+In this exercise we analyze the data in \texttt{data3A\$x}, which contains a sequence of length $T = 100$ of a non-Gaussian time-series, and compare two different parameter estimators. We consider an $AR(2)$ model which is specified by the relation
+%
+\begin{equation*}
+    x_t = \beta_1 x_{t-1} + \beta_2 x_{t-2} + e_t \, ,
+\end{equation*}
+%
+where $e_t$ are iid random variable with zero mean and constant variance.
+
+The least sum of squared residuals (LS) and least sum of absolute residuals (LA) are obtained by minimizing the following loss functions with respect to $\beta$:
+%
+\begin{align*}
+    Q_{LS}(\vect{x}) &= \sum_{t=3}^T (x_t - \beta_1 x_{t-1} \beta_2 x_{t-2})^2 \\
+    Q_{LS}(\vect{x}) &= \sum_{t=3}^T |x_t - \beta_1 x_{t-1} \beta_2 x_{t-2}| \, .
+\end{align*}
+%
+Let us denote the minimizers by $\hat{\vect{\beta}}_{LS}$ and $\hat{\vect{\beta}}_{LA}$ (calculated by \texttt{ARp.beta.est}). Further we define the estimated residuals to be $\hat{e}_t = x_t - \hat{\beta_1} x_{t-1} - \hat{\beta_2} x_{t-2}$ for $t = 3, \dots , T$, and let $\Bar{e}$ be the mean of these. Finally we define the centered residuals $\hat{\epsilon}_t = \hat{e}_t - \Bar{e}$. The centered residuals are obtained using \texttt{ARp.resid}.
+
+\paragraph{1.} We use the residual resampling bootstrap method to evaluate the relative performance of the two parameter estimators. First we calculate $\hat{\vect{\beta}}_{LS}$ and $\hat{\vect{\beta}}_{LA}$ from the provided data set. Next we simulate the time series $B=2000$ times for each estimator. This is done by randomly choosing to consecutive values $x_t$ and $x_{t+1}$ from the original time series as initial values ($x_1^*, x_2^*$) and then iteratively finding $x_t^*$, $t = 3, \dots, T$ using the parameter estimators and bootstrap samples of the centered residuals. 
+
+The original time series and three simulated time series using each of the estimators are shown in 
+
+\begin{figure}
+    \centering
+    \includegraphics{figures/p1_time_series.pdf}
+    \caption{aajøkajs}
+    \label{fig:my_label}
+\end{figure}
+
+\textcolor{red}{qs: centered residuals? optimal estimator? 2.?}
