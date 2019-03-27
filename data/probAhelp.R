@@ -9,10 +9,16 @@
 ##   x[t] = x[t-1]*beta[1] + ... + x[t-p]*beta[p] + e[t],  t=1,2,...,T
 ##
 ARp.beta.est = function(x, p) {
-    T = length(x)
+    L = length(x)
 
-    y = x[(1+p):T]
-    C = matrix(x[rep(0:(T-p-1), p) + rep(p:1, each=T-p)], T-p, p)
+    y = x[(1+p):L]
+    C = matrix(x[rep(0:(L-p-1), p) + rep(p:1, each=L-p)], L-p, p)
+    if(any(is.na(y))){
+      print(L)
+      print(p)
+      print(x)
+      print(y)
+    }
 
     ## Least squares:
     beta.hat.LS = qr.solve(C,y)
@@ -54,7 +60,7 @@ ARp.filter = function(x0, beta, e) {
     if (is.null(x0)) {
         x0 = rep(0,length(beta))
     }
-    # Caution: the function does not add the intial sequence to the 
+    # Caution: the function does not add the intial sequence to the
     # time series. Further it requires the reverse intial sequence
     # as argument.
     x = filter(e, beta, method="recursive", init=rx0)
