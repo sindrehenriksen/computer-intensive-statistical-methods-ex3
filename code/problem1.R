@@ -50,7 +50,7 @@ for(i in 1:length(nums)){
     labs(col="")
 }
 ggsave("../figures/p1_time_series.pdf", p_time_series,
-       width=5, height=4, units="in")
+       width=5, height=3, units="in")
 
 # Bootstrap samples parameter estimates
 beta_hat_la = t(apply(
@@ -115,4 +115,4 @@ for(i in 1:length(nums2)){
     labs(col="")
 }
 ggsave("../figures/p1_preds.pdf", p_preds,
-       width=5, height=4, units="in")
+       width=5, height=3, units="in")
