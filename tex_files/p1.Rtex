@@ -1,5 +1,8 @@
 \section{}
 \label{sec:p1}
+<<echo=FALSE>>=
+read_chunk("../code/problem1.R")
+@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 In this exercise we analyze the data in \texttt{data3A\$x}, which contains a sequence of length $T = 100$ of a non-Gaussian time-series, and compare two different parameter estimators. We consider an $AR(2)$ model which is specified by the relation
@@ -32,5 +35,7 @@ The original time series and three simulated time series using each of the estim
     \caption{Original time series data and three realizations using parameters estimated by least sum of squared residuals (LS) and parameters estimated by least sum of absolute residuals (LA), and bootstrap samples of the centered residuals.}
     \label{fig:p1_time_series}
 \end{figure}
+
+Now we estimate LA parameters from each of the time series simulated using the LA estimator, and similarly for LS. We calculate the 
 
 \textcolor{red}{qs: centered residuals? optimal estimator? 2.?}
