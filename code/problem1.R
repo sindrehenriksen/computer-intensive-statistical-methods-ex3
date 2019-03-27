@@ -36,17 +36,17 @@ x_hat_ls = t(replicate(
 
 # Plot some of the samples and original data
 data = tibble(x=data3A$x, t=1:100)
-p_x = ggplot(data, aes(t, x, col="Data")) + geom_line()
+p_x = ggplot(data) + geom_line(aes(t, x, col="Data"))
 nums = c(300, 600, 1000)
 p_time_series = p_x
 for(i in 1:length(nums)){
   p_time_series = p_time_series +
     geom_line(
       data=tibble(x=x_hat_la[nums[i],], t=1:100),
-      (aes(col="LA"))) +
+      (aes(t, x, col="LA"))) +
     geom_line(
       data=tibble(x=x_hat_ls[nums[i],], t=1:100),
-      (aes(col="LS"))) +
+      (aes(t, x, col="LS"))) +
     labs(col="")
 }
 # ggsave("../figures/p1_time_series.pdf", p_time_series,
@@ -82,7 +82,7 @@ bootstrap_estimator_resids_ls = t(apply(
 
 # Predictions of x_101 using bootstrap samples of the resids above
 AR2.bootstrap.pred = function(x0, beta, e){
-  return(sum(beta * rev(x0)) + e)
+  return(sum(beta * rev(x0)) + sample(e, replace=T))
 }
 
 x0 = data3A$x[99:100]
@@ -102,21 +102,23 @@ x101_mean_ls = mean(x101_preds_ls)
 x101_pi_la = quantile(x101_preds_la, c(0.025, 0.975))
 x101_pi_ls = quantile(x101_preds_ls, c(0.025, 0.975))
 
-# Plot some of the predictions
-nums2 = c(10, 50, 70)
+# Plot 95% prediction intervals
 p_preds = p_x
-for(i in 1:length(nums2)){
-  p_preds = p_preds +
-    geom_point(
-      data=tibble(x=x101_preds_la[nums[i], nums2[i]], t=101),
-      aes(t, x, col="LA"), shape="x", size=2) +
-    geom_point(
-      data=tibble(x=x101_preds_ls[nums[i], nums2[i]], t=101),
-      aes(t, x, col="LS"), shape="x", size=2) +
-    labs(col="")
-}
-# ggsave("../figures/p1_preds.pdf", p_preds,
-#        width=5, height=3, units="in")
+p_preds = p_preds +
+  geom_ribbon(
+    data=tibble(xmin=c(data3A$x[100], x101_pi_la[1]),
+                xmax=c(data3A$x[100], x101_pi_la[2]),
+                t=c(100, 101)),
+    aes(x=t, ymin=xmin, ymax=xmax, fill="LA"), alpha=0.3) +
+  geom_ribbon(
+    data=tibble(xmin=c(data3A$x[100], x101_pi_ls[1]),
+                xmax=c(data3A$x[100], x101_pi_ls[2]),
+                t=c(100, 101)),
+    aes(x=t, ymin=xmin, ymax=xmax, fill="LS"), alpha=0.3) +
+  scale_fill_manual("", values=c(3, 4)) +
+  labs(col="")
+ggsave("../figures/p1_preds.pdf", p_preds,
+       width=5, height=3, units="in")
 
 ## ---- save
 save(beta_la, beta_ls,
