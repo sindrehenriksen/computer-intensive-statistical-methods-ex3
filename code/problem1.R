@@ -18,7 +18,7 @@ beta_ls = beta$LS
 epsilon_la = ARp.resid(data3A$x, beta_la)
 epsilon_ls = ARp.resid(data3A$x, beta_ls)
 
-## ---- p1_1
+## ---- p11_sim
 # AR residual resampling method
 ARp.rrbootstrap = function(x, beta, e){
   i = sample(1:99, 1)
@@ -52,6 +52,7 @@ for(i in 1:length(nums)){
 ggsave("../figures/p1_time_series.pdf", p_time_series,
        width=5, height=3, units="in")
 
+## ---- p11_stats
 # Bootstrap samples parameter estimates
 beta_hat_la = t(apply(
   x_hat_la, 1, function(x){ARp.beta.est(x, 2)$LA}))
