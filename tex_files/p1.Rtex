@@ -41,6 +41,10 @@ The original time series and three simulated time series using each of the estim
     \label{fig:p1_time_series}
 \end{figure}
 
-Now we estimate LA parameters from each of the time series simulated using the LA estimator, and similarly for LS. We calculate the means $\Bar{\vect{\beta}}^*_{LA}$ and $\Bar{\vect{\beta}}^*_{LS}$ and variances of all these and estimated parameters. This gives biases $\Bar{\vect{\beta}}^*_{LA} - \hat{\vect{\beta}}_{LA} \approx $ (\Sexpr{nice(beta_hat_la_bias)}), $\Bar{\vect{\beta}}^*_{LS} - \hat{\vect{\beta}}_{LS} \approx $ (\Sexpr{nice(beta_hat_ls_bias)}) and variances (\Sexpr{nice(beta_hat_la_var)}) for the LA estimator and (\Sexpr{nice(beta_hat_ls_var)}) for the LS estimator.
+Now we estimate LA parameters from each of the time series simulated using the LA estimator, and similarly for LS. We calculate the means $\Bar{\vect{\beta}}^*_{LA}$ and $\Bar{\vect{\beta}}^*_{LS}$ and variances of all these and estimated parameters. This gives biases $\Bar{\vect{\beta}}^*_{LA} - \hat{\vect{\beta}}_{LA} \approx $ (\Sexpr{nice(beta_hat_la_bias)}), $\Bar{\vect{\beta}}^*_{LS} - \hat{\vect{\beta}}_{LS} \approx $ (\Sexpr{nice(beta_hat_ls_bias)}) and variances (\Sexpr{nice(beta_hat_la_var, 5)}) for the LA estimator and (\Sexpr{nice(beta_hat_ls_var, 5)}) for the LS estimator. The biases and variances of the LS estimator are a little larger. However, they are also very small; the biases are $< 1.5\%$ and the variances $< 1\%$ of the original estimator values.
+
+\paragraph{2.} Next we wish to compute 95\% prediction intervals for $x_{101}$ using both the LA and LS estimators. We estimate the series of 98 residuals using all the 2000 parameters from 1., from both the LA and LS methods. Then we predict $x_{101}$ using a bootstrap sample from the residuals together with the parameters used to obtain the respective residuals, i.e. we get $98 \cdot 2000$ predictions for each of the methods. To get the prediction interval we take the 0.025 and 0.975 quantiles from the predictions.
+
+The resulting intervals are 
 
 \textcolor{red}{qs: centered residuals? optimal estimator? 2.?}
