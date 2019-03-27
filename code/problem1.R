@@ -119,6 +119,7 @@ for(i in 1:length(nums2)){
 #        width=5, height=3, units="in")
 
 ## ---- save
-save(beta_hat_la_bias, beta_hat_la_mean, beta_hat_ls_bias,
-     beta_hat_ls_mean,
+save(beta_la, beta_ls,
+     beta_hat_la_bias, beta_hat_la_mean,
+     beta_hat_ls_bias, beta_hat_ls_mean,
      file="../data/p1.Rdata")
