@@ -19,15 +19,18 @@ The least sum of squared residuals (LS) and least sum of absolute residuals (LA)
 %
 Let us denote the minimizers by $\hat{\vect{\beta}}_{LS}$ and $\hat{\vect{\beta}}_{LA}$ (calculated by \texttt{ARp.beta.est}). Further we define the estimated residuals to be $\hat{e}_t = x_t - \hat{\beta_1} x_{t-1} - \hat{\beta_2} x_{t-2}$ for $t = 3, \dots , T$, and let $\Bar{e}$ be the mean of these. Finally we define the centered residuals $\hat{\epsilon}_t = \hat{e}_t - \Bar{e}$. The centered residuals are obtained using \texttt{ARp.resid}.
 
-\paragraph{1.} We use the residual resampling bootstrap method to evaluate the relative performance of the two parameter estimators. First we calculate $\hat{\vect{\beta}}_{LS}$ and $\hat{\vect{\beta}}_{LA}$ from the provided data set. Next we simulate the time series $B=2000$ times for each estimator. This is done by randomly choosing to consecutive values $x_t$ and $x_{t+1}$ from the original time series as initial values ($x_1^*, x_2^*$) and then iteratively finding $x_t^*$, $t = 3, \dots, T$ using the parameter estimators and bootstrap samples of the centered residuals. 
+\paragraph{1.} We use the residual resampling bootstrap method to evaluate the relative performance of the two parameter estimators. First we calculate $\hat{\vect{\beta}}_{LS}$ and $\hat{\vect{\beta}}_{LA}$ from the provided data set. Next we simulate the time series $B=2000$ times for each estimator. This is done by randomly choosing to consecutive values $x_t$ and $x_{t+1}$ from the original time series as initial values ($x_1^*, x_2^*$) and then iteratively finding $x_t^*$, $t = 3, \dots, T$ using the parameter estimators and bootstrap samples of the centered residuals. The \texttt{ARp.filter} function is used to build the time series, and the rest is done as shown in the code below.
 
-The original time series and three simulated time series using each of the estimators are shown in 
+<<p11_sim, eval=FALSE>>=
+@
+
+The original time series and three simulated time series using each of the estimators are shown in \figref{fig:p1_time_series}. It is not possible to conclude anything about the quality of the estimators from the plot, but it doesn't give any indications that the estimators are not good.
 
 \begin{figure}
     \centering
     \includegraphics{figures/p1_time_series.pdf}
-    \caption{aajøkajs}
-    \label{fig:my_label}
+    \caption{Original time series data and three realizations using parameters estimated by least sum of squared residuals (LS) and parameters estimated by least sum of absolute residuals (LA), and bootstrap samples of the centered residuals.}
+    \label{fig:p1_time_series}
 \end{figure}
 
 \textcolor{red}{qs: centered residuals? optimal estimator? 2.?}
