@@ -42,6 +42,10 @@ The code for the linear regression is shown bellow, where we get the F-statistic
 <<linearReg2, eval=FALSE>>==
 @
 %
+%
+<<printFval, echo=FALSE>>==
+@
+%
 \paragraph{(2.)}
 In the \texttt{permTest} function a data frame of the \textit{bilirubin} data is the only input. It creates a temporary data frame and then changes the order of the grouping in the \texttt{\$pers} column, to create a permutation of the data. Then be the same method used in \textbf{1.} we calculate and return the F-statistic.
 %
