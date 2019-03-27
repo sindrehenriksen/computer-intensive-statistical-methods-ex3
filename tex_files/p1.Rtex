@@ -22,7 +22,12 @@ The least sum of squared residuals (LS) and least sum of absolute residuals (LA)
 %
 Let us denote the minimizers by $\hat{\vect{\beta}}_{LS}$ and $\hat{\vect{\beta}}_{LA}$ (calculated by \texttt{ARp.beta.est}). Further we define the estimated residuals to be $\hat{e}_t = x_t - \hat{\beta_1} x_{t-1} - \hat{\beta_2} x_{t-2}$ for $t = 3, \dots , T$, and let $\Bar{e}$ be the mean of these. Finally we define the centered residuals $\hat{\epsilon}_t = \hat{e}_t - \Bar{e}$. The centered residuals are obtained using \texttt{ARp.resid}.
 
-\paragraph{1.} We use the residual resampling bootstrap method to evaluate the relative performance of the two parameter estimators. First we calculate $\hat{\vect{\beta}}_{LS}$ and $\hat{\vect{\beta}}_{LA}$ from the provided data set. Next we simulate the time series $B=2000$ times for each estimator. This is done by randomly choosing to consecutive values $x_t$ and $x_{t+1}$ from the original time series as initial values ($x_1^*, x_2^*$) and then iteratively finding $x_t^*$, $t = 3, \dots, T$ using the parameter estimators and bootstrap samples of the centered residuals. The \texttt{ARp.filter} function is used to build the time series, and the rest is done as shown in the code below.
+<<echo=FALSE>>=
+load("../data/p1.Rdata")
+nice = function(x, n=4) format(round(x, n), nsmall=n)
+@
+
+\paragraph{1.} We use the residual resampling bootstrap method to evaluate the relative performance of the two parameter estimators. First we calculate $\hat{\vect{\beta}}_{LA} \approx $ (\Sexpr{nice(beta_la)}) and $\hat{\vect{\beta}}_{LS} \approx $ (\Sexpr{nice(beta_ls)}) from the provided data set. Next we simulate the time series $B=2000$ times for each estimator. This is done by randomly choosing to consecutive values $x_t$ and $x_{t+1}$ from the original time series as initial values ($x_1^*, x_2^*$) and then iteratively finding $x_t^*$, $t = 3, \dots, T$ using the parameter estimators and bootstrap samples of the centered residuals. The \texttt{ARp.filter} function is used to build the time series, and the rest is done as shown in the code below.
 
 <<p11_sim, eval=FALSE>>=
 @
@@ -36,10 +41,6 @@ The original time series and three simulated time series using each of the estim
     \label{fig:p1_time_series}
 \end{figure}
 
-<<echo=FALSE>>=
-load("../data/p1.Rdata")
-@
-
-Now we estimate LA parameters from each of the time series simulated using the LA estimator, and similarly for LS. We calculate the means $\Bar{\vect{\beta}}^*_{LA}$ and $\Bar{\vect{\beta}}^*_{LS}$ and variances of all these and estimated parameters. This gives biases $\Bar{\vect{\beta}}^*_{LA} - \hat{\vect{\beta}}_{LA} = $ (\Sexpr{format(round(beta_hat_la_bias, 4), nsmall=4)}), $\Bar{\vect{\beta}}^*_{LS} - \hat{\vect{\beta}}_{LS} = $ (\Sexpr{format(round(beta_hat_ls_bias, 4), nsmall=4)})
+Now we estimate LA parameters from each of the time series simulated using the LA estimator, and similarly for LS. We calculate the means $\Bar{\vect{\beta}}^*_{LA}$ and $\Bar{\vect{\beta}}^*_{LS}$ and variances of all these and estimated parameters. This gives biases $\Bar{\vect{\beta}}^*_{LA} - \hat{\vect{\beta}}_{LA} \approx $ (\Sexpr{nice(beta_hat_la_bias)}), $\Bar{\vect{\beta}}^*_{LS} - \hat{\vect{\beta}}_{LS} \approx $ (\Sexpr{nice(beta_hat_ls_bias)}) and variances (\Sexpr{nice(beta_hat_la_var)}) for the LA estimator and (\Sexpr{nice(beta_hat_ls_var)}) for the LS estimator.
 
 \textcolor{red}{qs: centered residuals? optimal estimator? 2.?}
