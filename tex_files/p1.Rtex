@@ -2,6 +2,8 @@
 \label{sec:p1}
 <<echo=FALSE>>=
 read_chunk("../code/problem1.R")
+load("../data/p1.Rdata")
+nice = function(x, n=4) format(round(x, n), nsmall=n)
 @
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -21,11 +23,6 @@ The least sum of squared residuals (LS) and least sum of absolute residuals (LA)
 \end{align*}
 %
 Let us denote the minimizers by $\hat{\vect{\beta}}_{LS}$ and $\hat{\vect{\beta}}_{LA}$ (calculated by \texttt{ARp.beta.est}). Further we define the estimated residuals to be $\hat{e}_t = x_t - \hat{\beta_1} x_{t-1} - \hat{\beta_2} x_{t-2}$ for $t = 3, \dots , T$, and let $\Bar{e}$ be the mean of these. Finally we define the centered residuals $\hat{\epsilon}_t = \hat{e}_t - \Bar{e}$. The centered residuals are obtained using \texttt{ARp.resid}.
-
-<<echo=FALSE>>=
-load("../data/p1.Rdata")
-nice = function(x, n=4) format(round(x, n), nsmall=n)
-@
 
 \paragraph{1.} We use the residual resampling bootstrap method to evaluate the relative performance of the two parameter estimators. First we calculate $\hat{\vect{\beta}}_{LA} \approx $ (\Sexpr{nice(beta_la)}) and $\hat{\vect{\beta}}_{LS} \approx $ (\Sexpr{nice(beta_ls)}) from the provided data set. Next we simulate the time series $B=2000$ times for each estimator. This is done by randomly choosing to consecutive values $x_t$ and $x_{t+1}$ from the original time series as initial values ($x_1^*, x_2^*$) and then iteratively finding $x_t^*$, $t = 3, \dots, T$ using the parameter estimators and bootstrap samples of the centered residuals. The \texttt{ARp.filter} function is used to build the time series, and the rest is done as shown in the code below.
 
