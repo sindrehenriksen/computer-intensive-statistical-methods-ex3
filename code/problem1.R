@@ -2,7 +2,7 @@ setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 rm(list = ls())
 
 ## ---- p1_prelim
-# Load data
+# Load libraries and data
 library(ggplot2)
 library(tibble)
 source("../data/probAhelp.R")
