@@ -67,3 +67,8 @@ Thus
     \pd{Q}{\lambda_0} = \frac{n}{\lambda_0} - \sum_{i=1}^n E[x_i \given z_i, u_i, \lambda_0^{(t)}] = 0 \quad \Rightarrow \lambda_0 = n \left[ \sum_{i=1}^n E[x_i \given z_i, u_i, \lambda_0^{(t)}] \right]^{-1} \, ,  \\
     \pd{Q}{\lambda_1} = \frac{n}{\lambda_1} - \sum_{i=1}^n E[y_i \given z_i, u_i, \lambda_1^{(t)}] = 0 \quad \Rightarrow \lambda_1 = n \left[ \sum_{i=1}^n E[y_i \given z_i, u_i, \lambda_1^{(t)}] \right]^{-1} \, .
 \end{align*}
+%
+The EM algorithm maximizes $Q(\vect{\lambda} \given \vect{\lambda}^{(t)})$, where $\vect{\lambda} = (\lambda_0, \lambda_1)$ iteratively, setting $\vect{\lambda}^{(t)} = \argmax_{\vect{\lambda}} \, Q(\vect{\lambda} \given \vect{\lambda}^{(t-1)})$. This is repeated until some criterion is satisfied. We choose to say that convergence is obtained when the $l_2\text{-norm}$ of the difference $\vect{\lambda}^{(t)} - \vect{\lambda}^{(t-1)}$ is smaller than some user-defined tolerance. The algorithm is implemented in the following code.
+
+<<p3_prelim, eval=FALSE>>=
+@
