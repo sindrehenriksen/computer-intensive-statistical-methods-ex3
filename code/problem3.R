@@ -35,15 +35,18 @@ em = function(z, u, lambda_initial, tol) {
   lambda = lambda_initial
   i = 0
   steps = numeric()
+  lambda_steps = list(lambda_initial)
   while(step > tol) {
     i = i + 1
     temp = lambda
     lambda = argmax_Q(z, u, lambda)
     step = sqrt(sum((lambda - temp)^2))
     steps[i] = step
+    lambda_steps[[i + 1]] = lambda
   }
   print(paste0("Converged after ", i, " iterations"))
-  return(list(lambda=lambda, steps=steps))
+  return(
+    list(lambda=lambda, lambda_steps=lambda_steps, steps=steps))
 }
 
 # Estimate lambda
@@ -53,11 +56,24 @@ lambda = res$lambda
 
 # Plot convergence
 steps = res$steps
-steps.df = tibble(iteration=(1:length(steps)), step=steps)
-p_convergence = ggplot(steps.df, aes(x=iteration, y=step)) +
+steps_df = tibble(iteration=(1:length(steps)), step=steps)
+p_convergence = ggplot(steps_df, aes(x=iteration, y=step)) +
   geom_point() +
   labs(y="l2-norm of step size")
-# ggsave("../figures/p2_convergence.pdf", p_convergence,
+# ggsave("../figures/p3_convergence.pdf", p_convergence,
+       # width=5, height=3, units="in")
+
+lambda_steps = do.call("rbind", res$lambda_steps)
+lambda_steps_df = tibble(iteration=0:length(steps),
+                      lambda0=lambda_steps[,1],
+                      lambda1=lambda_steps[,2])
+p_lambda = ggplot(lambda_steps_df) +
+  geom_point(aes(x=iteration, y=lambda0, col="lambda0"),
+             alpha=0.7) +
+  geom_point(aes(x=iteration, y=lambda1, col="lambda1"),
+             alpha=0.7) +
+  labs(y="Lambda values", col="")
+# ggsave("../figures/p3_lambda.pdf", p_lambda,
        # width=5, height=3, units="in")
 
 # ggplot() +
