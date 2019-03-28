@@ -68,18 +68,6 @@ beta_hat_la_var = apply(beta_hat_la, 2, var)
 beta_hat_ls_var = apply(beta_hat_ls, 2, var)
 
 ## ---- p1_2
-# Residuals from the original data with the bootstrap estimators
-# bootstrap_estimator_resids_la = t(apply(
-#   cbind(x_hat_la, beta_hat_la),
-#   1,
-#   function(x){ARp.resid(x[1:100], x[101:102])}
-# ))
-# bootstrap_estimator_resids_ls = t(apply(
-#   cbind(x_hat_ls, beta_hat_ls),
-#   1,
-#   function(x){ARp.resid(x[1:100], x[101:102])}
-# ))
-
 # Predictions of x_101 using random resid for all betas
 AR2.bootstrap.pred = function(x0, beta, e){
   return(sum(beta * rev(x0)) + sample(e, 1))
@@ -117,8 +105,8 @@ p_preds = p_preds +
     aes(x=t, ymin=xmin, ymax=xmax, fill="LS"), alpha=0.3) +
   scale_fill_manual("", values=c(3, 4)) +
   labs(col="")
-ggsave("../figures/p1_preds.pdf", p_preds,
-       width=5, height=3, units="in")
+# ggsave("../figures/p1_preds.pdf", p_preds,
+       # width=5, height=3, units="in")
 
 ## ---- save
 save(beta_la, beta_ls,
