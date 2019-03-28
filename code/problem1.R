@@ -108,7 +108,7 @@ p_preds = p_preds +
 # ggsave("../figures/p1_preds.pdf", p_preds,
        # width=5, height=3, units="in")
 
-## ---- save
+## ---- p1_save
 save(beta_la, beta_ls,
      beta_hat_la_bias, beta_hat_ls_bias,
      beta_hat_la_var, beta_hat_ls_var,

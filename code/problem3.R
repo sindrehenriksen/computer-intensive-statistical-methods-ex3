@@ -57,9 +57,12 @@ steps.df = tibble(iteration=(1:length(steps)), step=steps)
 p_convergence = ggplot(steps.df, aes(x=iteration, y=step)) +
   geom_point() +
   labs(y="l2-norm of step size")
-ggsave("../figures/p2_convergence.pdf", p_convergence,
-       width=5, height=3, units="in")
+# ggsave("../figures/p2_convergence.pdf", p_convergence,
+       # width=5, height=3, units="in")
 
 # ggplot() +
   # geom_histogram(data=tibble(y=z), aes(y, ..density..)) +
   # geom_histogram(data=tibble(y=data$z), aes(y, ..density..), fill="2")
+
+## ---- p3_save
+save(lambda, file="../data/p3.Rdata")
