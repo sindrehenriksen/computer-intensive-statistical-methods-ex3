@@ -4,11 +4,13 @@
 \usepackage{hyperref}
 \usepackage{amsmath}
 \usepackage{bm}
+\usepackage{bbm}
+\usepackage{commath}
 
 \input{tex_files/math_commands.tex}
 
 \renewcommand{\thesection}{Problem \Alph{section}}
-\newcommand{\figref}[1]{Figure~\ref{#1}}
+% \newcommand{\figref}[1]{Figure~\ref{#1}}
 
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{1mm} 
@@ -19,7 +21,6 @@
 
 \begin{document}
     \maketitle
-    \input{intro}
     \input{p1}
     \input{p2}
     \input{p3}
