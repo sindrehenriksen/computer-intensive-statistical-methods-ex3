@@ -1,5 +1,8 @@
 \section{}
 \label{sec:p3}
+<<echo=FALSE>>=
+read_chunk("../code/problem3.R")
+@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 Let $\vect{x} = x_1, \dots, x_n$ and $\vect{y} = y_1, \dots, y_n$ be independent random variables, where the $x_i\text{'s}$ have an exponential distribution with intensity $\lambda_0$ and the $y_i\text{'s}$ have an exponential distribution with intensity $\lambda_1$. Assume we do not observe $\vect{x}$ and $\vect{y}$ directly, but that we observe
@@ -72,3 +75,8 @@ The EM algorithm maximizes $Q(\vect{\lambda} \given \vect{\lambda}^{(t)})$, wher
 
 <<p3_prelim, eval=FALSE>>=
 @
+\vspace{-1em}
+<<p3_2, eval=FALSE>>=
+@
+
+
