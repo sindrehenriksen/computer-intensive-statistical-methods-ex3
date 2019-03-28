@@ -79,4 +79,11 @@ The EM algorithm maximizes $Q(\vect{\lambda} \given \vect{\lambda}^{(t)})$, wher
 <<p3_2, eval=FALSE>>=
 @
 
+As sees in 
 
+\begin{figure}
+    \centering
+    \includegraphics{figures/p2_convergence.pdf}
+    \caption{Caption}
+    \label{fig:my_label}
+\end{figure}
