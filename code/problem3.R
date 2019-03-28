@@ -10,6 +10,7 @@ data <- data.frame(
   u = read.table("../data/u.txt",header=F, col.names = "u")
 )
 
+## ---- p3_2
 # M-step function (returns argmax of complete likelihood)
 argmax_Q = function(z, u, lambda) {
   n = length(z)
