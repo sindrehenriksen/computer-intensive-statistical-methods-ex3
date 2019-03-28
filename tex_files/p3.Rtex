@@ -2,3 +2,68 @@
 \label{sec:p3}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+Let $\vect{x} = x_1, \dots, x_n$ and $\vect{y} = y_1, \dots, y_n$ be independent random variables, where the $x_i\text{'s}$ have an exponential distribution with intensity $\lambda_0$ and the $y_i\text{'s}$ have an exponential distribution with intensity $\lambda_1$. Assume we do not observe $\vect{x}$ and $\vect{y}$ directly, but that we observe
+%
+\begin{equation*}
+    z_i = \max(x_i, y_i) \quad \text{for} \ i = 1, \dots, n \, ,
+\end{equation*}
+%
+and
+%
+\begin{equation*}
+    u_i = \ind(x_i \geq y_i) \quad \text{for} \ i = 1, \dots, n \, ,
+\end{equation*}
+%
+where $\ind(A)$ is 1 if $A$ is true and 0 otherwise.
+
+Based on the observed $(z_i, u_i), \ i = 1, \dots, n$, we will use the EM algorithm to find the maximum likelihood estimates for $(\lambda_0, \lambda_1)$.
+
+\paragraph{1.} Since $z_i$ and $u_i$ are determined by $x_i$ and $y_i$, our complete data is simply $\vect{x}$ and $\vect{y}$. The likelihood of the complete data is thus
+%
+\begin{equation*}
+    f(\vect{x}, \vect{y} \given \lambda_0, \lambda_1) = \lambda_0^n \lambda_1^n \exp \left\{-\lambda_0 \sum_{i=1}^n x_i - \lambda_1 \sum_{i=1}^n y_i \right\} \, ,
+\end{equation*}
+%
+where we have used that the variables are independent and that the PDF of an exponential random variable $w$ with rate $\lambda$ is $\lambda e^{-\lambda w}$. This gives the log likelihood
+%
+\begin{equation*}
+    \ln f(\vect{x}, \vect{y} \given \lambda_0, \lambda_1) = n \ln \lambda_0 + n \ln \lambda_1 - \lambda_0 \sum_{i=1}^n x_i - \lambda_1 \sum_{i=1}^n y_i \, .
+\end{equation*}
+%
+The expecation of the log likelihood is
+%
+\begin{multline*}
+    \E [\ln f(\vect{x}, \vect{y} \given \lambda_0, \lambda_1) \given \vect{z}, \vect{u}, \lambda_0^{(t)}, \lambda_1^{(t)}] = n \ln \lambda_0 + n \ln \lambda_1 - \lambda_0 \sum_{i=1}^n \E[x_i \given z_i, u_i, \lambda_0^{(t)}] \\
+    - \lambda_1 \sum_{i=1}^n \E[y_i \given z_i, u_i, \lambda_1^{(t)}] \, .
+\end{multline*}
+%
+Now
+%
+\begin{align*}
+    E[x_i \given z_i, u_i, \lambda_0^{(t)}] &= u_i z_i + (1 - u_i) \E[x_i \given x_i < z_i, \lambda_0^{(t)}] \\
+    &= u_i z_i + (1 - u_i) \int_0^{z_i} x_i \frac{f(x_i)}{F(z_i)} \dif x_i \\
+    &= u_i z_i + (1 - u_i) \frac{1}{1 - e^{-\lambda_0^{(t)} z_i}} \int_0^{z_i} x_i \lambda_0^{(t)} e^{ -\lambda_0^{(t)} x_i} \dif x_i \\
+    &= u_i z_i + (1 - u_i) \frac{1}{1 - e^{-\lambda_0^{(t)} z_i}} \left[ -z_i e^{ -\lambda_0^{(t)} z_i }  - \frac{e^{-\lambda_0^{(t)} z_i}}{\lambda_0^{(t)}} + \frac{1}{\lambda_0^{(t)}}\right] \\
+    &= u_i z_i + (1 - u_i) \left[\frac{1}{\lambda_0^{(t)}} - \frac{z_i}{e^{\lambda_0^{(t)} z_i} - 1}\right] \,
+\end{align*}
+%
+and, similarly,
+%
+\begin{equation*}
+    E[y_i \given z_i, u_i, \lambda_1^{(t)}] = (1 - u_i) z_i + u_i \left[\frac{1}{\lambda_1^{(t)}} - \frac{z_i}{e^{\lambda_1^{(t)} z_i} - 1}\right] \, .
+\end{equation*}
+%
+Thus
+%
+\begin{align*}
+    \E [\ln f(\vect{x}, \vect{y} \given \lambda_0, \lambda_1) \given \vect{z}, \vect{u}, \lambda_0^{(t)}, \lambda_1^{(t)}] &= n \ln \lambda_0 + n \ln \lambda_1 \\
+    & \ - \lambda_0 \sum_{i=1}^n \left( u_i z_i + (1 - u_i) \left[\frac{1}{\lambda_0^{(t)}} - \frac{z_i}{e^{\lambda_0^{(t)} z_i} - 1}\right] \right) \\
+    & \ - \lambda_1 \sum_{i=1}^n \left( (1 - u_i) z_i + u_i \left[\frac{1}{\lambda_1^{(t)}} - \frac{z_i}{e^{\lambda_1^{(t)} z_i} - 1}\right] \right)\, .
+\end{align*}
+
+\paragraph{2.} To maximize $Q(\lambda_0, \lambda_1) = \E [\ln f(\vect{x}, \vect{y} \given \lambda_0, \lambda_1) \given \vect{z}, \vect{u}, \lambda_0^{(t)}, \lambda_1^{(t)}]$ we need
+%
+\begin{align*}
+    \pd{Q}{\lambda_0} = \frac{n}{\lambda_0} - \sum_{i=1}^n E[x_i \given z_i, u_i, \lambda_0^{(t)}] = 0 \quad \Rightarrow \lambda_0 = n \left[ \sum_{i=1}^n E[x_i \given z_i, u_i, \lambda_0^{(t)}] \right]^{-1} \, ,  \\
+    \pd{Q}{\lambda_1} = \frac{n}{\lambda_1} - \sum_{i=1}^n E[y_i \given z_i, u_i, \lambda_1^{(t)}] = 0 \quad \Rightarrow \lambda_1 = n \left[ \sum_{i=1}^n E[y_i \given z_i, u_i, \lambda_1^{(t)}] \right]^{-1} \, .
+\end{align*}

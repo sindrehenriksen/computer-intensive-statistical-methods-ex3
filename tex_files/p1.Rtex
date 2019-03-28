@@ -29,6 +29,9 @@ nice = function(x, n=4) format(round(x, n), nsmall=n)
 
 \paragraph{1.} We use the residual resampling bootstrap method to evaluate the relative performance of the two parameter estimators. First we calculate $\hat{\vect{\beta}}_{LA} \approx $ (\Sexpr{nice(beta_la)}) and $\hat{\vect{\beta}}_{LS} \approx $ (\Sexpr{nice(beta_ls)}) from the provided data set. Next we simulate the time series $B=2000$ times for each estimator. This is done by randomly choosing to consecutive values $x_t$ and $x_{t+1}$ from the original time series as initial values ($x_1^*, x_2^*$) and then iteratively finding $x_t^*$, $t = 3, \dots, T$ using the parameter estimators and bootstrap samples of the centered residuals. The \texttt{ARp.filter} function is used to build the time series, and the rest is done as shown in the code below.
 
+<<p1_prelim, eval=FALSE>>=
+@
+\vspace{-1em}
 <<p11_sim, eval=FALSE>>=
 @
 
@@ -45,6 +48,13 @@ Now we estimate LA parameters from each of the time series simulated using the L
 
 \paragraph{2.} Next we wish to compute 95\% prediction intervals for $x_{101}$ using both the LA and LS estimators. We estimate the series of 98 residuals using all the 2000 parameters from 1., from both the LA and LS methods. Then we predict $x_{101}$ using a bootstrap sample from the residuals together with the parameters used to obtain the respective residuals, i.e. we get $98 \cdot 2000$ predictions for each of the methods. To get the prediction interval we take the 0.025 and 0.975 quantiles from the predictions.
 
-The resulting intervals are 
+The resulting intervals are (\Sexpr{nice(x101_pi_la)}) (LA) and (\Sexpr{nice(x101_pi_ls)}) (LS). They are shown in \figref{fig:p1_preds}. The intervals are so close that they are almost indistinguishable in the plot. This is not surprising, considering the estimated parameters from the methods are very similar, as discussed in 1.
 
-\textcolor{red}{qs: centered residuals? optimal estimator? 2.?}
+\begin{figure}
+    \centering
+    \includegraphics{figures/p1_preds.pdf}
+    \caption{Original time series data and prediction intervals of $x_{101}$ obtained using different LA and LS estimators bootstrap samples of residuals calculated with those estimators.}
+    \label{fig:p1_preds}
+\end{figure}
+
+\textcolor{red}{qs: centered residuals? how many samples? which residuals?}
