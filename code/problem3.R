@@ -61,7 +61,7 @@ p_convergence = ggplot(steps_df, aes(x=iteration, y=step)) +
   geom_point() +
   labs(y="l2-norm of step size")
 # ggsave("../figures/p3_convergence.pdf", p_convergence,
-       # width=5, height=3, units="in")
+       # width=4, height=3, units="in")
 
 lambda_steps = do.call("rbind", res$lambda_steps)
 lambda_steps_df = tibble(iteration=0:length(steps),
