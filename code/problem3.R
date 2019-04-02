@@ -82,3 +82,50 @@ p_lambda = ggplot(lambda_steps_df) +
 
 ## ---- p3_save
 save(lambda, file="../data/p3.Rdata")
+
+
+## ---- bs3c
+library(gridExtra)
+n <- length(data$u)
+lambda_init = c(1,1)
+B <- 200
+theta.hat.boot <- matrix(NA,nrow = B, ncol = 2)
+for (i in seq(1,B)){
+  index = sample(1:n,n,replace = T)
+  theta.hat.boot[i,] = em(data$z[index], data$u[index], lambda_init, 1e-2)$lambda
+}
+
+lambda.df <- data.frame(lambda0 = theta.hat.boot[,1],lambda1 = theta.hat.boot[,2])
+load(file="../data/p3.Rdata")
+
+sd.lambda0 <- sd(lambda.df$lambda0)
+sd.lambda1 <- sd(lambda.df$lambda1)
+
+
+bias.lambda0 <- mean(lambda.df$lambda0) - lambda[1]
+bias.lambda1 <- mean(lambda.df$lambda1) - lambda[2]
+
+cor(lambda.df$lambda0, lambda.df$lambda1)
+
+# Calculating the bias correction 
+lambda.c.df <- data.frame(
+  lambda0 = lambda.df$lambda0 - bias.lambda0,
+  lambda1 = lambda.df$lambda1 - bias.lambda1 
+  )
+
+sd.lambda0.c <- var(lambda.c.df$lambda0) - var(lambda.df$lambda0)
+sd.lambda1.c <- var(lambda.c.df$lambda1) - var(lambda.df$lambda1)
+
+
+hist.lambda0 <- ggplot(lambda.df) + 
+  geom_histogram(aes(x = lambda0, y = ..density..),bins = 10)+ 
+  geom_vline(xintercept = mean(lambda.df$lambda0), color = "firebrick") 
+
+hist.lambda1 <- ggplot(lambda.df) + 
+  geom_histogram(aes(x = lambda1, y = ..density..),bins = 10)+ 
+  geom_vline(xintercept = mean(lambda.df$lambda1), color = "firebrick")
+
+grid.arrange(hist.lambda0,hist.lambda1)
+
+
+## ---- bs3d
