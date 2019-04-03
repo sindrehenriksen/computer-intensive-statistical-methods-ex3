@@ -124,13 +124,14 @@ hist.lambda1 <- ggplot(lambda.df) +
 
 hist.lambda <- grid.arrange(hist.lambda0,hist.lambda1)
 
-cat("Standard diviation \\lambda_0:", sd.lambda0)
-cat("Standard diviation \\lambda_1:", sd.lambda1)
-cat("Bias of \\hat{\\lambda}_0:", bias.lambda0)
-cat("Bias of \\hat{\\lambda}_1:", bias.lambda1)
-cat("Correlation between \\hat{\\lambda}_0 and \\hat{\\lambda}_1:",cor.lambda)
-cat("Bias corrected \\lambda_0:", lambda0c)
-cat("Bias corrected \\lambda_1:", lambda1c)
+cat("Standard diviation lambda_0:", sprintf("%.2f",sd.lambda0))
+cat("Standard diviation lambda_1:", sprintf("%.2f",sd.lambda1))
+cat("Bias of lambda_0:", sprintf("%.2f",bias.lambda0))
+cat("Bias of lambda_1:", sprintf("%.2f",bias.lambda1))
+cat("Correlation between lambda_0 and lambda_1:",
+    sprintf("%.2f",cor.lambda))
+cat("Bias corrected lambda_0:", sprintf("%.2f",lambda0c))
+cat("Bias corrected lambda_1:", sprintf("%.2f",lambda1c))
 
 
 ## ---- break
@@ -142,11 +143,11 @@ save(file = "../data/variables/c3print.Rdata", c3print)
 
 ## ---- print3c
 load(file = "../data/variables/c3print.Rdata")
-cat("Standard diviation \\lambda_0:", c3print[1])
-cat("Standard diviation \\lambda_1:", c3print[2])
-cat("Bias of \\hat{\\lambda}_0:", c3print[3])
-cat("Bias of \\hat{\\lambda}_1:", c3print[4])
-cat("Correlation between \\hat{\\lambda}_0 and \\hat{\\lambda}_1:",c3print[5])
-cat("Bias corrected \\lambda_0:", c3print[6])
-cat("Bias corrected \\lambda_1:", c3print[7])
+cat("Standard diviation lambda_0:", sprintf("%.2f",c3print[1]))
+cat("Standard diviation lambda_1:", sprintf("%.2f",c3print[2]))
+cat("Bias of lambda}_0:", sprintf("%.2f",c3print[3]))
+cat("Bias of lambda}_1:", sprintf("%.2f",c3print[4]))
+cat("Correlation between lambda_0 and lambda_1:",sprintf("%.2f",c3print[5]))
+cat("Bias corrected lambda_0:", sprintf("%.2f",c3print[6]))
+cat("Bias corrected lambda_1:", sprintf("%.2f",c3print[7]))
 ## ---- bs3d
