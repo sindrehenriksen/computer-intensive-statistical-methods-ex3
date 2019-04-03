@@ -34,7 +34,7 @@ cat("F-statistic:", Fval)
 ## ---- permTest
 permTest <- function(bili.df){
   # temporary dataframe
-    bili.p.df = bili.df
+  bili.p.df = bili.df
   # permutation on the grouping column
   bili.p.df$pers = bili.df$pers[sample(1:nrow(bili.p.df))]
   # return of summary.lm and fetching the fstat
