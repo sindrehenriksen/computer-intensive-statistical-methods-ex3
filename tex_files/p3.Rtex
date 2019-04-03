@@ -100,9 +100,16 @@ The EM algorithm is run on the data specified in the files \texttt{z.txt} and \t
 
 \paragraph{3.}
 
+
+<<bs3c, eval=FALSE>>=
+@
+
+<<print3c, echo=FALSE>>=
+@
+
 \begin{figure}
     \centering
-    \includegraphics{figures/p3_lambda.pdf}
+    \includegraphics{figures/hist_lambda.pdf}
     \caption{}
     \label{fig:hist_lambda}
 \end{figure}
