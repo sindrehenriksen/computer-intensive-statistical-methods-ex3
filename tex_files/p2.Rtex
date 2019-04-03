@@ -6,7 +6,7 @@ read_chunk("../code/problem2.R")
 \label{sec:p2}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \paragraph{(1.)}
-The data used in this problem is the '\textit{bilirubin.txt}' data set. It contains bilirubin levels in the blood of three different persons. It is imported in the code bellow and we used the \textbf{tidyverse}-package to create plots and data frames.
+The data used in this problem is the '\textit{bilirubin.txt}' data set. It contains bilirubin levels in the blood of three different persons. It is imported in the code below and we used \texttt{ggplo2} from the \textbf{tidyverse}-package to create the plots.
 %
 <<labsdata2, eval=FALSE>>==
 @
@@ -37,7 +37,7 @@ We want to do a F-test on the hypothesis $\beta_1 = \beta_2 = \beta_3$, which is
     \end{array}
     \label{eq:ftest}
 \end{equation}
-The code for the linear regression is shown bellow, where we get the F-statistics of the observed data $F_{\mathrm{obs}}$ from the \texttt{summary.lm} function and we store it in \texttt{Fval}.
+The code for the linear regression is shown under. We get the F-statistics of the observed data $F_{\mathrm{obs}}$ from the \texttt{summary.lm} function and we store it in \texttt{Fval}. Using the F-distribution to calculate the p-value, $p\mathrm{-value} = 0.039$, or using just the F-value, if we chose a significance level of $5\%$, the hypothesis wouldn't be accepted. 
 %
 <<linearReg2, eval=FALSE>>==
 @
@@ -47,18 +47,18 @@ The code for the linear regression is shown bellow, where we get the F-statistic
 @
 %
 \paragraph{(2.)}
-In the \texttt{permTest} function a data frame of the \textit{bilirubin} data is the only input. It creates a temporary data frame and then changes the order of the grouping in the \texttt{\$pers} column, to create a permutation of the data. Then be the same method used in \textbf{1.} we calculate and return the F-statistic.
+In the \texttt{permTest} function a data frame of the \textit{bilirubin} data is the only input. It creates a temporary data frame and then changes the order of the grouping in the \texttt{\$pers} column, to create a permutation of the data. Then with the same method used in question \textbf{1.}, we calculate and return the F-statistic.
 %
 <<permTest, eval=FALSE>>==
 @
 %  
 
 \paragraph{(3.)}
-Now we are ready to implement a permutation test using the function created in \textbf{2.} on $N = 999$ different permutations. The returned F-statistics $F_i; i\in[1,N]$ can then be used to calculate the p-value of the F-test shown in Equation \eqref{eq:ftest}. The p-value is calculated by the equation
+We are now ready to implement a permutation test using the function created in question \textbf{2.}, with $N = 999$ different permutations. The returned F-statistics $F_i; i\in[1,N]$ can then be used to calculate the p-value of the F-test shown in Equation \eqref{eq:ftest}. The p-value is calculated by the equation
 \begin{equation*}
     \textrm{p-value} = \frac{\sum\limits_{i=1}^N I(F_i>=F_{\textrm{obs}})}{N},
 \end{equation*}
-where $I(A) = 1$ if $A$ is true and $0$ otherwise. A histogram of the F-statistics from the permutations is shown in Figure \ref{fig:his_fstat}. Here one can see that most of the F-values are bellow the red line, which is the F-value of the bilirubin data, which also is a indication that the p-value is small. Our implementation of the permutation test is shown bellow, and the p-value is printed. 
+where $I(A) = 1$ if $A$ is true and $0$ otherwise. A histogram of the F-statistics from the permutations is shown in Figure \ref{fig:his_fstat}. Here one can see that most of the F-values are to the left of the red line, which is the F-value of the bilirubin data found in question \textbf{1.}. Since most of the points are to the left of the line this is a strong indication of a small p-value. Our implementation of the permutation test is shown below, and the p-value is printed. 
 %
 <<permutationTest, eval=FALSE>>==
 @
@@ -73,3 +73,5 @@ where $I(A) = 1$ if $A$ is true and $0$ otherwise. A histogram of the F-statisti
 <<printPval, echo=FALSE>>==
 @
 %
+
+The $p\mathrm{-value} = 0.041$, which is as expected from looking at Figure \ref{fig:his_fstat}, small. If we chose a significance level of $5\%$ the hypothesis wouldn't be accepted, which means that the \textit{bilirubin} levels for the three different persons, are of different distributions. 
