@@ -5,6 +5,7 @@ rm(list = ls())
 # Load libraries and data
 library(ggplot2)
 library(tibble)
+set.seed(123)
 data <- data.frame(
   z = read.table("../data/z.txt",header=F, col.names = "z"),
   u = read.table("../data/u.txt",header=F, col.names = "u")
@@ -86,9 +87,10 @@ save(lambda, file="../data/p3.Rdata")
 
 ## ---- bs3c
 library(gridExtra)
+set.seed(56)
 n <- length(data$u)
 lambda_init = c(1,1)
-B <- 200
+B <- 1500
 theta.hat.boot <- matrix(NA,nrow = B, ncol = 2)
 for (i in seq(1,B)){
   index = sample(1:n,n,replace = T)
@@ -105,27 +107,46 @@ sd.lambda1 <- sd(lambda.df$lambda1)
 bias.lambda0 <- mean(lambda.df$lambda0) - lambda[1]
 bias.lambda1 <- mean(lambda.df$lambda1) - lambda[2]
 
-cor(lambda.df$lambda0, lambda.df$lambda1)
+cor.lambda <- cor(lambda.df$lambda0, lambda.df$lambda1)
 
 # Calculating the bias correction 
-lambda.c.df <- data.frame(
-  lambda0 = lambda.df$lambda0 - bias.lambda0,
-  lambda1 = lambda.df$lambda1 - bias.lambda1 
-  )
-
-sd.lambda0.c <- var(lambda.c.df$lambda0) - var(lambda.df$lambda0)
-sd.lambda1.c <- var(lambda.c.df$lambda1) - var(lambda.df$lambda1)
+lambda0c = lambda[1]- bias.lambda0
+lambda1c = lambda[2] - bias.lambda1 
 
 
 hist.lambda0 <- ggplot(lambda.df) + 
-  geom_histogram(aes(x = lambda0, y = ..density..),bins = 10)+ 
-  geom_vline(xintercept = mean(lambda.df$lambda0), color = "firebrick") 
+  geom_histogram(aes(x = lambda0, y = ..density..),bins = 30)+ 
+  geom_vline(xintercept = lambda[1], color = "firebrick",size=1) 
 
 hist.lambda1 <- ggplot(lambda.df) + 
-  geom_histogram(aes(x = lambda1, y = ..density..),bins = 10)+ 
-  geom_vline(xintercept = mean(lambda.df$lambda1), color = "firebrick")
+  geom_histogram(aes(x = lambda1, y = ..density..),bins = 30)+ 
+  geom_vline(xintercept = lambda[2], color = "firebrick",size=1)
 
-grid.arrange(hist.lambda0,hist.lambda1)
+hist.lambda <- grid.arrange(hist.lambda0,hist.lambda1)
+
+cat("Standard diviation \\lambda_0:", sd.lambda0)
+cat("Standard diviation \\lambda_1:", sd.lambda1)
+cat("Bias of \\hat{\\lambda}_0:", bias.lambda0)
+cat("Bias of \\hat{\\lambda}_1:", bias.lambda1)
+cat("Correlation between \\hat{\\lambda}_0 and \\hat{\\lambda}_1:",cor.lambda)
+cat("Bias corrected \\lambda_0:", lambda0c)
+cat("Bias corrected \\lambda_1:", lambda1c)
 
 
+## ---- break
+ggsave("../figures/hist_lambda.pdf", hist.lambda,
+       width=5.5, height=5.5, units="in")
+c3print <- c(sd.lambda0,sd.lambda1,bias.lambda0,bias.lambda1,cor.lambda,lambda0c,lambda1c)
+save(file = "../data/variables/c3print.Rdata", c3print)
+
+
+## ---- print3c
+load(file = "../data/variables/c3print.Rdata")
+cat("Standard diviation \\lambda_0:", c3print[1])
+cat("Standard diviation \\lambda_1:", c3print[2])
+cat("Bias of \\hat{\\lambda}_0:", c3print[3])
+cat("Bias of \\hat{\\lambda}_1:", c3print[4])
+cat("Correlation between \\hat{\\lambda}_0 and \\hat{\\lambda}_1:",c3print[5])
+cat("Bias corrected \\lambda_0:", c3print[6])
+cat("Bias corrected \\lambda_1:", c3print[7])
 ## ---- bs3d
