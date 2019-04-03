@@ -81,7 +81,7 @@ The EM algorithm maximizes $Q(\vect{\lambda} \given \vect{\lambda}^{(t)})$, wher
 <<p3_2, eval=FALSE>>=
 @
 
-The EM algorithm is run on the data specified in the files \texttt{z.txt} and \texttt{u.txt}. Setting the tolerance to 0.01, the algorithm converges after 8 iterations, giving the estimate $\vect{\lambda} = $ (\Sexpr{nice(lambda)}). The $l_2\text{-norms}$ of the step-sizes $\vect{\lambda}^{(t)} - \vect{\lambda}^{(t-1)}$ are shown in \figref{fig:p3_convergence}. The values of $\vect{\lambda}$ after each iteration are shown in ... We see that blah blah converges faster blah blah migth be due to more data points...
+The EM algorithm is run on the data specified in the files \texttt{z.txt} and \texttt{u.txt}. Setting the tolerance to 0.01, the algorithm converges after 8 iterations, giving the estimate $\vect{\lambda} = $ (\Sexpr{nice(lambda)}). The $l_2\text{-norms}$ of the step-sizes $\vect{\lambda}^{(t)} - \vect{\lambda}^{(t-1)}$ are shown in \figref{fig:p3_convergence}. The values of $\vect{\lambda}$ after each iteration are shown in \figref{fig:p3_lambda}. We see that $\lambda_0$ converges faster than $\lambda_1$. The same happens also with different starting values. This might be due to 142 of the 200 data points in \texttt{z.txt} being from $\vect{x}$ (which can be seen from the number of ones in \texttt{u.txt}).
 
 \begin{figure}
     \centering
@@ -89,3 +89,21 @@ The EM algorithm is run on the data specified in the files \texttt{z.txt} and \t
     \caption{Convergence of EM algorithm for the data in \ref{sec:p3}. The algorithm stops when the $l_2\text{-norm}$ of the step-size $\vect{\lambda^{(t)}} - \vect{\lambda^{(t-1)}} < 0.01$., i.e. after 8 iterations.}
     \label{fig:p3_convergence}
 \end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics{figures/p3_lambda.pdf}
+    \caption{Values of $\lambda_0$ and $\lambda_1$ after each iteration of the EM algorithm discussed in \ref{sec:p3}.}
+    \label{fig:p3_lambda}
+\end{figure}
+
+
+\paragraph{3.}
+
+\begin{figure}
+    \centering
+    \includegraphics{figures/p3_lambda.pdf}
+    \caption{}
+    \label{fig:hist_lambda}
+\end{figure}
+\paragraph{4.}
