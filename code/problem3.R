@@ -77,10 +77,6 @@ p_lambda = ggplot(lambda_steps_df) +
 # ggsave("../figures/p3_lambda.pdf", p_lambda,
        # width=5, height=3, units="in")
 
-# ggplot() +
-  # geom_histogram(data=tibble(y=z), aes(y, ..density..)) +
-  # geom_histogram(data=tibble(y=data$z), aes(y, ..density..), fill="2")
-
 
 ## ---- bs3c
 library(gridExtra)
@@ -91,10 +87,12 @@ B <- 1500
 theta.hat.boot <- matrix(NA,nrow = B, ncol = 2)
 for (i in seq(1,B)){
   index = sample(1:n,n,replace = T)
-  theta.hat.boot[i,] = em(data$z[index], data$u[index], lambda_init, 1e-2)$lambda
+  theta.hat.boot[i,] = em(
+    data$z[index], data$u[index], lambda_init, 1e-2)$lambda
 }
 
-lambda.df <- data.frame(lambda0 = theta.hat.boot[,1],lambda1 = theta.hat.boot[,2])
+lambda.df <- data.frame(
+  lambda0 = theta.hat.boot[,1],lambda1 = theta.hat.boot[,2])
 load(file="../data/p3.Rdata")
 
 sd.lambda0 <- sd(lambda.df$lambda0)
@@ -131,8 +129,9 @@ cat("Bias corrected lambda_1:", sprintf("%.2f",lambda1c))
 ## ---- break
 ggsave("../figures/hist_lambda.pdf", hist.lambda,
        width=5.5, height=5.5, units="in")
-c3print <- c(sd.lambda0,sd.lambda1,bias.lambda0,bias.lambda1,cor.lambda,
-             lambda0c,lambda1c)
+c3print <- c(
+  sd.lambda0,sd.lambda1,bias.lambda0,bias.lambda1,cor.lambda,
+  lambda0c,lambda1c)
 save(file = "../data/variables/c3print.Rdata", c3print)
 
 ## ---- print3c
@@ -141,13 +140,15 @@ cat("Standard diviation lambda_0:", sprintf("%.2f",c3print[1]))
 cat("Standard diviation lambda_1:", sprintf("%.2f",c3print[2]))
 cat("Bias of lambda}_0:", sprintf("%.2f",c3print[3]))
 cat("Bias of lambda}_1:", sprintf("%.2f",c3print[4]))
-cat("Correlation between lambda_0 and lambda_1:",sprintf("%.2f",c3print[5]))
+cat("Correlation between lambda_0 and lambda_1:",
+    sprintf("%.2f",c3print[5]))
 cat("Bias corrected lambda_0:", sprintf("%.2f",c3print[6]))
 cat("Bias corrected lambda_1:", sprintf("%.2f",c3print[7]))
 
 
 ## ---- p3_4
-# Derivatitve of ln f(z,u) as a function of lambda (lambda0/lambda1)
+# Derivatitve of ln f(z,u) as a function of lambda
+# (lambda0/lambda1)
 dlnf_dlambda = function(lambda, u, z) {
   return(
     sum(u) / lambda + sum(
@@ -157,8 +158,10 @@ dlnf_dlambda = function(lambda, u, z) {
 }
 
 # Find the roots
-uni0 = uniroot(function(x){dlnf_dlambda(x, data$u, data$z)}, c(0.001, 100))
-uni1 = uniroot(function(x){dlnf_dlambda(x, (1-data$u), data$z)}, c(0.001, 100))
+uni0 = uniroot(
+  function(x){dlnf_dlambda(x, data$u, data$z)}, c(0.001, 100))
+uni1 = uniroot(
+  function(x){dlnf_dlambda(x, (1-data$u), data$z)}, c(0.001, 100))
 lambda_mle = c(uni0$root, uni1$root)
 
 
