@@ -82,22 +82,6 @@ p_lambda = ggplot(lambda_steps_df) +
   # geom_histogram(data=tibble(y=data$z), aes(y, ..density..), fill="2")
 
 
-## ---- p3_4
-# Derivatitve of ln f(z,u) as a function of lambda (lambda0/lambda1)
-dlnf_dlambda = function(lambda, u, z) {
-  return(
-    sum(u) / lambda + sum(
-      (1 - u) * z / (exp(lambda * z) - 1) - u * z
-    )
-  )
-}
-
-# Find the roots
-uni0 = uniroot(function(x){dlnf_dlambda(x, data$u, data$z)}, c(0.001, 100))
-uni1 = uniroot(function(x){dlnf_dlambda(x, (1-data$u), data$z)}, c(0.001, 100))
-lambda_mle = c(uni0$root, uni1$root)
-
-
 ## ---- bs3c
 library(gridExtra)
 set.seed(56)
@@ -147,7 +131,8 @@ cat("Bias corrected lambda_1:", sprintf("%.2f",lambda1c))
 ## ---- break
 ggsave("../figures/hist_lambda.pdf", hist.lambda,
        width=5.5, height=5.5, units="in")
-c3print <- c(sd.lambda0,sd.lambda1,bias.lambda0,bias.lambda1,cor.lambda,lambda0c,lambda1c)
+c3print <- c(sd.lambda0,sd.lambda1,bias.lambda0,bias.lambda1,cor.lambda,
+             lambda0c,lambda1c)
 save(file = "../data/variables/c3print.Rdata", c3print)
 
 ## ---- print3c
@@ -159,6 +144,23 @@ cat("Bias of lambda}_1:", sprintf("%.2f",c3print[4]))
 cat("Correlation between lambda_0 and lambda_1:",sprintf("%.2f",c3print[5]))
 cat("Bias corrected lambda_0:", sprintf("%.2f",c3print[6]))
 cat("Bias corrected lambda_1:", sprintf("%.2f",c3print[7]))
+
+
+## ---- p3_4
+# Derivatitve of ln f(z,u) as a function of lambda (lambda0/lambda1)
+dlnf_dlambda = function(lambda, u, z) {
+  return(
+    sum(u) / lambda + sum(
+      (1 - u) * z / (exp(lambda * z) - 1) - u * z
+    )
+  )
+}
+
+# Find the roots
+uni0 = uniroot(function(x){dlnf_dlambda(x, data$u, data$z)}, c(0.001, 100))
+uni1 = uniroot(function(x){dlnf_dlambda(x, (1-data$u), data$z)}, c(0.001, 100))
+lambda_mle = c(uni0$root, uni1$root)
+
 
 ## ---- p3_save
 save(lambda_em, lambda_mle, file="../data/p3.Rdata")
