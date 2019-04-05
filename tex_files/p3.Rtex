@@ -81,7 +81,7 @@ The EM algorithm maximizes $Q(\vect{\lambda} \given \vect{\lambda}^{(t)})$, wher
 <<p3_2, eval=FALSE>>=
 @
 
-The EM algorithm is run on the data specified in the files \texttt{z.txt} and \texttt{u.txt}. Setting the tolerance to 0.01, the algorithm converges after 8 iterations, giving the estimate $\vect{\lambda} = $ (\Sexpr{nice(lambda)}). The $l_2\text{-norms}$ of the step-sizes $\vect{\lambda}^{(t)} - \vect{\lambda}^{(t-1)}$ are shown in \figref{fig:p3_convergence}. The values of $\vect{\lambda}$ after each iteration are shown in \figref{fig:p3_lambda}. We see that $\lambda_0$ converges faster than $\lambda_1$. The same happens also with different starting values. This might be due to 142 of the 200 data points in \texttt{z.txt} being from $\vect{x}$ (which can be seen from the number of ones in \texttt{u.txt}).
+The EM algorithm is run on the data specified in the files \texttt{z.txt} and \texttt{u.txt}. Setting the tolerance to 0.01, the algorithm converges after 8 iterations, giving the estimate $\vect{\lambda} = $ (\Sexpr{nice(lambda_em)}). The $l_2\text{-norms}$ of the step-sizes $\vect{\lambda}^{(t)} - \vect{\lambda}^{(t-1)}$ are shown in \figref{fig:p3_convergence}. The values of $\vect{\lambda}$ after each iteration are shown in \figref{fig:p3_lambda}. We see that $\lambda_0$ converges faster than $\lambda_1$. The same happens also with different starting values. This might be due to 142 of the 200 data points in \texttt{z.txt} being from $\vect{x}$ (which can be seen from the number of ones in \texttt{u.txt}).
 
 \begin{figure}
     \centering
@@ -113,4 +113,78 @@ The EM algorithm is run on the data specified in the files \texttt{z.txt} and \t
     \caption{}
     \label{fig:hist_lambda}
 \end{figure}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \paragraph{4.}
+We now wish to find an analytical formula for $f_{Z_i, \, U_i}(z_i, u_i \given \lambda_0, \lambda_1)$. Throughout the following derivation, we assumes $\lambda_0$ and $\lambda_1$ are known without stating it explicitly. We start by finding
+\begin{equation*}
+    \prob(Z_i \leq z_i, u_i) = u_i \prob(X_i \leq z_i, X_i > Y_i) + (1-u_i) \prob(Y_i \leq z_i, Y_i > X_i) \, .
+\end{equation*}
+%
+Now
+%
+\begin{align*}
+    \prob(X_i \leq z_i, X_i > Y_i) &= \int_0^{z_i} \int_y^{z_i} f_Y(y) f_X(x) \dif x \dif y \\
+    &= 1 - e^{-\lambda_0 z_i} + \frac{\lambda_0}{\lambda_0 + \lambda_1} (1 - e^{-(\lambda_0 + \lambda_1) z_i}) \, .
+\end{align*}
+%
+Similarly,
+%
+\begin{equation*}
+    \prob(Y_i \leq z_i, Y_i > X_i) =  1 - e^{-\lambda_1 z_i} + \frac{\lambda_1}{\lambda_0 + \lambda_1} (1 - e^{-(\lambda_0 + \lambda_1) z_i}) \, .
+\end{equation*}
+%
+Next we find
+%
+\begin{align*}
+    f_{Z_i, \, U_i} (z_i, u_i) &= \pd{}{z} \prob(Z_i \leq z_i, u_i) \\
+    &= u_i \left[ \lambda_0 e^{-\lambda_0 z_i} (1 - e^{-\lambda_1 z_i}) \right]
+    + (1-u_i) \left[ \lambda_1 e^{-\lambda_1 z_i} (1 - e^{-\lambda_0 z_i}) \right] \\
+    &= u_i g(z_i) + (1-u_i) h(z_i) \, ,
+\end{align*}
+%
+where
+%
+\begin{align*}
+    g(z_i) &= \lambda_0 e^{-\lambda_0 z_i} (1 - e^{-\lambda_1 z_i}) \, \\
+    h(z_i) &= \lambda_1 e^{-\lambda_1 z_i} (1 - e^{-\lambda_0 z_i}) \, .
+\end{align*}
+Next we wish to find the maximum likelihood estimate of $\lambda_0$ and $\lambda_1$. First we need the likelhood
+%
+\begin{equation*}
+    f_{\vect{Z}, \, \vect{U}} (\vect{z}, \vect{u}) = \prod_{i \st u_i=1} g(z_i) \prod_{i \st u_i=0} h(z_i) \, .
+\end{equation*}
+%
+The log likelihood is
+%
+\begin{align*}
+    \log f_{\vect{Z}, \, \vect{U}} (\vect{Z}, \vect{U}) &= \sum_{i \st u_i = 1} \log g(z_i) + \sum_{i \st u_i = 0} \log h(z_i) \\
+    &= \sum_{i=1}^n u_i \log g(z_i) + (1-u_i) \log h(z_i) \, .
+\end{align*}
+%
+Now 
+%
+\begin{align*}
+    \log g(z_i) &= \log \lambda_0 - \lambda_0 z_i + \log (1 - e^{-\lambda_1 z_i}) \, , \quad \text{and} \\
+    \log h(z_i) &= \log \lambda_1 - \lambda_1 z_i + \log (1 - e^{-\lambda_0 z_i}) \, ,
+\end{align*}
+%
+so
+%
+\begin{multline}
+\label{eq:p3_loglik}
+    \log f_{\vect{Z}, \, \vect{U}} (\vect{Z}, \vect{U}) = k \log \lambda_0 + (n-k) \log \lambda_1 \\
+    + \sum_{i=1}^n \left\{ u_i \left[ \log (1 - e^{-\lambda_1 z_i}) - \lambda_0 z_i \right] + (1-u_i) \left[ \log (1 - e^{-\lambda_0 z_i}) - \lambda_1 z_i \right] \right\} \, ,
+\end{multline}
+%
+where $k = \sum_{i=1}^n u_i$. To find the maximum we take the derivative with respect to $\lambda_0$ and $\lambda_1$;
+%
+\begin{equation}
+\label{eq:p3_score}
+\begin{split}
+    \pd{}{\lambda_0} \log f &= \frac{k}{\lambda_0} + \sum_{i=1}^n \left[ (1-u_i) \frac{z_i}{e^{\lambda_0 z_i} - 1} - u_i z_i \right] \, , \quad \text{and} \\
+    \pd{}{\lambda_1} \log f &= \frac{n-k}{\lambda_1} + \sum_{i=1}^n \left[ u_i \frac{z_i}{e^{\lambda_1 z_i} - 1} - (1-u_i) z_i \right] \, .
+\end{split}
+\end{equation}
+%
+Even without the sum this equation is not easy to solve analytically, and the sum seems to make it impossible. So we find the MLE numerically. This can be done by finding $\lambda_0$ and $\lambda_1$ maximizing the log-likelihood \eqref{eq:p3_loglik} directly, or by finding the roots of \eqref{eq:p3_score}. We do the latter, since it is somewhat simpler to implement in this case; see the following code.
