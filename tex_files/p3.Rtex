@@ -97,9 +97,8 @@ The EM algorithm is run on the data specified in the files \texttt{z.txt} and \t
     \label{fig:p3_lambda}
 \end{figure}
 
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \paragraph{3.}
-
 
 <<bs3c, eval=FALSE>>=
 @
@@ -149,7 +148,7 @@ where
     g(z_i) &= \lambda_0 e^{-\lambda_0 z_i} (1 - e^{-\lambda_1 z_i}) \, \\
     h(z_i) &= \lambda_1 e^{-\lambda_1 z_i} (1 - e^{-\lambda_0 z_i}) \, .
 \end{align*}
-Next we wish to find the maximum likelihood estimate of $\lambda_0$ and $\lambda_1$. First we need the likelhood
+Next we wish to find the maximum likelihood estimate of $\lambda_0$ and $\lambda_1$. First we need the likelihood
 %
 \begin{equation*}
     f_{\vect{Z}, \, \vect{U}} (\vect{z}, \vect{u}) = \prod_{i \st u_i=1} g(z_i) \prod_{i \st u_i=0} h(z_i) \, .
@@ -188,3 +187,6 @@ where $k = \sum_{i=1}^n u_i$. To find the maximum we take the derivative with re
 \end{equation}
 %
 Even without the sum this equation is not easy to solve analytically, and the sum seems to make it impossible. So we find the MLE numerically. This can be done by finding $\lambda_0$ and $\lambda_1$ maximizing the log-likelihood \eqref{eq:p3_loglik} directly, or by finding the roots of \eqref{eq:p3_score}. We do the latter, since it is somewhat simpler to implement in this case; see the following code.
+
+% <<p3_4, eval=FALSE>>
+% @
