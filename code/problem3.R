@@ -53,7 +53,7 @@ em = function(z, u, lambda_initial, tol) {
 # Estimate lambda
 lambda_init = c(1, 1)
 res = em(data$z, data$u, lambda_init, 1e-2)
-lambda = res$lambda
+lambda_em = res$lambda
 
 # Plot convergence
 steps = res$steps
@@ -81,8 +81,21 @@ p_lambda = ggplot(lambda_steps_df) +
   # geom_histogram(data=tibble(y=z), aes(y, ..density..)) +
   # geom_histogram(data=tibble(y=data$z), aes(y, ..density..), fill="2")
 
-## ---- p3_save
-save(lambda, file="../data/p3.Rdata")
+
+## ---- p3_4
+# Derivatitve of ln f(z,u) as a function of lambda (lambda0/lambda1)
+dlnf_dlambda = function(lambda, u, z) {
+  return(
+    sum(u) / lambda + sum(
+      (1 - u) * z / (exp(lambda * z) - 1) - u * z
+    )
+  )
+}
+
+# Find the roots
+uni0 = uniroot(function(x){dlnf_dlambda(x, data$u, data$z)}, c(0.001, 100))
+uni1 = uniroot(function(x){dlnf_dlambda(x, (1-data$u), data$z)}, c(0.001, 100))
+lambda_mle = c(uni0$root, uni1$root)
 
 
 ## ---- bs3c
@@ -103,23 +116,21 @@ load(file="../data/p3.Rdata")
 sd.lambda0 <- sd(lambda.df$lambda0)
 sd.lambda1 <- sd(lambda.df$lambda1)
 
-
 bias.lambda0 <- mean(lambda.df$lambda0) - lambda[1]
 bias.lambda1 <- mean(lambda.df$lambda1) - lambda[2]
 
 cor.lambda <- cor(lambda.df$lambda0, lambda.df$lambda1)
 
-# Calculating the bias correction 
+# Calculating the bias correction
 lambda0c = lambda[1]- bias.lambda0
-lambda1c = lambda[2] - bias.lambda1 
+lambda1c = lambda[2] - bias.lambda1
 
+hist.lambda0 <- ggplot(lambda.df) +
+  geom_histogram(aes(x = lambda0, y = ..density..),bins = 30)+
+  geom_vline(xintercept = lambda[1], color = "firebrick",size=1)
 
-hist.lambda0 <- ggplot(lambda.df) + 
-  geom_histogram(aes(x = lambda0, y = ..density..),bins = 30)+ 
-  geom_vline(xintercept = lambda[1], color = "firebrick",size=1) 
-
-hist.lambda1 <- ggplot(lambda.df) + 
-  geom_histogram(aes(x = lambda1, y = ..density..),bins = 30)+ 
+hist.lambda1 <- ggplot(lambda.df) +
+  geom_histogram(aes(x = lambda1, y = ..density..),bins = 30)+
   geom_vline(xintercept = lambda[2], color = "firebrick",size=1)
 
 hist.lambda <- grid.arrange(hist.lambda0,hist.lambda1)
@@ -133,13 +144,11 @@ cat("Correlation between lambda_0 and lambda_1:",
 cat("Bias corrected lambda_0:", sprintf("%.2f",lambda0c))
 cat("Bias corrected lambda_1:", sprintf("%.2f",lambda1c))
 
-
 ## ---- break
 ggsave("../figures/hist_lambda.pdf", hist.lambda,
        width=5.5, height=5.5, units="in")
 c3print <- c(sd.lambda0,sd.lambda1,bias.lambda0,bias.lambda1,cor.lambda,lambda0c,lambda1c)
 save(file = "../data/variables/c3print.Rdata", c3print)
-
 
 ## ---- print3c
 load(file = "../data/variables/c3print.Rdata")
@@ -150,4 +159,6 @@ cat("Bias of lambda}_1:", sprintf("%.2f",c3print[4]))
 cat("Correlation between lambda_0 and lambda_1:",sprintf("%.2f",c3print[5]))
 cat("Bias corrected lambda_0:", sprintf("%.2f",c3print[6]))
 cat("Bias corrected lambda_1:", sprintf("%.2f",c3print[7]))
-## ---- bs3d
+
+## ---- p3_save
+save(lambda_em, lambda_mle, file="../data/p3.Rdata")
