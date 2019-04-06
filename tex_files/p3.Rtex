@@ -99,17 +99,20 @@ The EM algorithm is run on the data specified in the files \texttt{z.txt} and \t
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \paragraph{3.}
+Similarly to what we did in problem A, we now wish to use bootstrapping to find the standard deviations and the biases of each of $\hat{\lambda}_1$ and $\hat{\lambda}_1$. The algorithm is like follows: Take bootstrap samples of the observation pairs and run the EM-algorithm on the bootstrap samples, repeat B times. Then calculate the standard deviation of the bootstrap estimators and the bias, i.e. the mean of the bootstrap samples minus the original estimator. We also find the correlation of the estimated parameters.
 
 <<bs3c, eval=FALSE>>=
 @
-
+\vspace{-1em}
 <<print3c, echo=FALSE>>=
 @
+
+\figref{fig:hist_lambda} contains a histogram of the bootstrap estimators. The standard deviations are 0.25 and 0.79 and the biases are 0.02 and 0.12, for $\hat{\lambda}_0$ and $\hat{\lambda}_1$, respectively. The correlation is 0.02. The biases are not very large; $\approx$ 1\% of the size of the original estimators. Thus we are tempted not to use the bias corrected estimators, since they have a larger variance than the original estimators. We could use just one bias corrected estimator and the original estimator for the other component since they seem to be almost uncorrelated. But the biases are both similarly small, so in this case they are probably better left uncorrected.
 
 \begin{figure}
     \centering
     \includegraphics{figures/hist_lambda.pdf}
-    \caption{}
+    \caption{Histogram of frequency of bootstrap estimators of $(\lambda_0, \lambda_1)$, found as explained in \ref{sec:p3}3.}
     \label{fig:hist_lambda}
 \end{figure}
 
@@ -182,11 +185,33 @@ where $k = \sum_{i=1}^n u_i$. To find the maximum we take the derivative with re
 \label{eq:p3_score}
 \begin{split}
     \pd{}{\lambda_0} \log f &= \frac{k}{\lambda_0} + \sum_{i=1}^n \left[ (1-u_i) \frac{z_i}{e^{\lambda_0 z_i} - 1} - u_i z_i \right] \, , \quad \text{and} \\
-    \pd{}{\lambda_1} \log f &= \frac{n-k}{\lambda_1} + \sum_{i=1}^n \left[ u_i \frac{z_i}{e^{\lambda_1 z_i} - 1} - (1-u_i) z_i \right] \, .
+    \pd{}{\lambda_1} \log f &= \frac{n-k}{\lambda_1} + \sum_{i=1}^n \left[ u_i \frac{z_i}{e^{\lambda_1 z_i} - 1} - (1-u_i) z_i \right] \, ,
 \end{split}
 \end{equation}
 %
-Even without the sum this equation is not easy to solve analytically, and the sum seems to make it impossible. So we find the MLE numerically. This can be done by finding $\lambda_0$ and $\lambda_1$ maximizing the log-likelihood \eqref{eq:p3_loglik} directly, or by finding the roots of \eqref{eq:p3_score}. We do the latter, since it is somewhat simpler to implement in this case; see the following code.
+and we let this equal 0. Even without the sum this equation is not easy to solve analytically, and the sum seems to make it impossible. So we find the MLE numerically. This can be done by finding $\lambda_0$ and $\lambda_1$ maximizing the log-likelihood \eqref{eq:p3_loglik} directly, or by finding the roots of \eqref{eq:p3_score}. We do the latter, since it is somewhat simpler to implement in this case.
 
-% <<p3_4, eval=FALSE>>
-% @
+To be sure that we find a global maximum and not a local one, we prove that the Hessian is negative definite. First we notice
+%
+\begin{equation*}
+    \pd{^2}{\lambda_0 \partial \lambda_1} \log f = \pd{^2}{\lambda_1 \partial \lambda_0} \log f = 0 \, .
+\end{equation*}
+%
+So the off-diagonal elements of the Hessian are 0. Thus the diagonal elements are the eigenvalues, and if they are negative the Hessian is negative definite. We get
+%
+\begin{align*}
+    \pd[2]{}{\lambda_0} \log f &= - \frac{k}{\lambda_0^2} - \sum_{i=1}^n (1-u_i) \frac{z_i^2 e^{\lambda_0 z_i}}{(e^{\lambda_0 z_i -1)^2}} \, , \quad \text{and} \\
+    \pd[2]{^2}{\lambda_1} \log f &= - \frac{n-k}{\lambda_1^2} - \sum_{i=1}^n u_i \frac{z_i^2 e^{\lambda_1 z_i}}{(e^{\lambda_1 z_i -1)^2}} \, .
+\end{align*}
+%
+Since $u_i$ are not all zero, the diagonal elements are $<0$. So we have proven that if we find a maximum it is the global maximum. The maximum likelihood estimators are found numerically in the following code.
+
+<<p3_4, eval=FALSE>>=
+@
+
+The result is $\vect{\lambda}_{MLE} =$ (\Sexpr{nice(lambda_mle)}). This is very close to the result from the expectation maximization algorithm $\vect{\lambda}_{EM} =$ (\Sexpr{nice(lambda_em)}).
+
+One advantage of maximizing the likelihood directly is that we are sure that we actually maximize the right thing; we maximize the likelihood and not the complete likelihood as in EM, where we also have to estimate values for $\vect{x}$ and $\vect{y}$. Another advantage is that we only have to maximize once, while with EM we have to maximize once for each iteration. Which in general can be computationally expensive. Furthermore, now that we have the Hessian, we can use it to find the amount of information in the data (if we can find the expectation of the second order partial derivatives). 
+
+In some cases, however, the numerical calculations to solve the equation(s) corresponding to setting \eqref{eq:p3_score} to 0 are computationally expensive, and less robust than the EM algorithm. And in other cases it might not even be possible to find the likelihood for the observed data; integrating out the hidden variables might not be possible analytically.
+
