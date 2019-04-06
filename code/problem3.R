@@ -136,10 +136,10 @@ save(file = "../data/variables/c3print.Rdata", c3print)
 
 ## ---- print3c
 load(file = "../data/variables/c3print.Rdata")
-cat("Standard diviation lambda_0:", sprintf("%.2f",c3print[1]))
-cat("Standard diviation lambda_1:", sprintf("%.2f",c3print[2]))
-cat("Bias of lambda}_0:", sprintf("%.2f",c3print[3]))
-cat("Bias of lambda}_1:", sprintf("%.2f",c3print[4]))
+cat("Standard deviation lambda_0:", sprintf("%.2f",c3print[1]))
+cat("Standard deviation lambda_1:", sprintf("%.2f",c3print[2]))
+cat("Bias of lambda_0:", sprintf("%.2f",c3print[3]))
+cat("Bias of lambda_1:", sprintf("%.2f",c3print[4]))
 cat("Correlation between lambda_0 and lambda_1:",
     sprintf("%.2f",c3print[5]))
 cat("Bias corrected lambda_0:", sprintf("%.2f",c3print[6]))

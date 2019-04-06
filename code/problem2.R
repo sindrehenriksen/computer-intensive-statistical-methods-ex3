@@ -3,18 +3,21 @@ rm(list = ls())
 
 ## ---- labsdata2
 library(tidyverse)
-bili.df <- as.data.frame(read.table("../data/bilirubin.txt",header=T))
+bili.df <-
+  as.data.frame(read.table("../data/bilirubin.txt",header=T))
 
 ## ---- boxplot.bili
 # boxplot of data
-boxplot.bili <- ggplot(bili.df, aes(x= pers, y = log(meas),fill=pers)) + 
-  geom_boxplot()+
+boxplot.bili <-
+  ggplot(bili.df, aes(x= pers, y = log(meas),fill=pers)) +
+  geom_boxplot() +
   ggtitle("boxplot of bilirubin data")
 
 boxplot.bili
 ## ---- break
-ggsave("../figures/boxplot_bili.pdf", plot = boxplot.bili, device = NULL, 
-       path = NULL,scale = 1, width = 5.5, height = 5.5, 
+ggsave("../figures/boxplot_bili.pdf", plot = boxplot.bili,
+       device = NULL,
+       path = NULL,scale = 1, width = 5.5, height = 5.5,
        units = "in",dpi = 300, limitsize = TRUE)
 
 ## ---- linearReg2
@@ -65,8 +68,9 @@ fstat.plot
 p.F <- mean(Fvals >= Fval)
 cat("p-value of F-statistics:", p.F)
 ## ---- break
-ggsave("../figures/his_fstat.pdf", plot = fstat.plot, device = NULL, 
-       path = NULL,scale = 1, width = 5.5, height = 5.5, 
+ggsave("../figures/his_fstat.pdf", plot = fstat.plot,
+       device = NULL,
+       path = NULL,scale = 1, width = 5.5, height = 5.5,
        units = "in",dpi = 300, limitsize = TRUE)
 save(file = "../data/variables/p_val_fstat.Rdata", p.F)
 
