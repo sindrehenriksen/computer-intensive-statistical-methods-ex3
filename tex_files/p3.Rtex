@@ -118,7 +118,7 @@ Similarly to what we did in problem A, we now wish to use bootstrapping to find 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \paragraph{4.}
-We now wish to find an analytical formula for $f_{Z_i, \, U_i}(z_i, u_i \given \lambda_0, \lambda_1)$. Throughout the following derivation, we assumes $\lambda_0$ and $\lambda_1$ are known without stating it explicitly. We start by finding
+We now wish to find an analytical formula for $f_{Z_i, \, U_i}(z_i, u_i \given \lambda_0, \lambda_1)$. Throughout the following derivation, we assume $\lambda_0$ and $\lambda_1$ are given without stating it explicitly. We start by finding
 \begin{equation*}
     \prob(Z_i \leq z_i, u_i) = u_i \prob(X_i \leq z_i, X_i > Y_i) + (1-u_i) \prob(Y_i \leq z_i, Y_i > X_i) \, .
 \end{equation*}
@@ -200,11 +200,11 @@ To be sure that we find a global maximum and not a local one, we prove that the 
 So the off-diagonal elements of the Hessian are 0. Thus the diagonal elements are the eigenvalues, and if they are negative the Hessian is negative definite. We get
 %
 \begin{align*}
-    \pd[2]{}{\lambda_0} \log f &= - \frac{k}{\lambda_0^2} - \sum_{i=1}^n (1-u_i) \frac{z_i^2 e^{\lambda_0 z_i}}{(e^{\lambda_0 z_i -1)^2}} \, , \quad \text{and} \\
-    \pd[2]{^2}{\lambda_1} \log f &= - \frac{n-k}{\lambda_1^2} - \sum_{i=1}^n u_i \frac{z_i^2 e^{\lambda_1 z_i}}{(e^{\lambda_1 z_i -1)^2}} \, .
+    \pd[2]{}{\lambda_0} \log f &= - \frac{k}{\lambda_0^2} - \sum_{i=1}^n (1-u_i) \frac{z_i^2 e^{\lambda_0 z_i}}{(e^{\lambda_0 z_i -1)^2}} < 0 \, , \quad \text{and} \\
+    \pd[2]{^2}{\lambda_1} \log f &= - \frac{n-k}{\lambda_1^2} - \sum_{i=1}^n u_i \frac{z_i^2 e^{\lambda_1 z_i}}{(e^{\lambda_1 z_i -1)^2}} < 0 \, .
 \end{align*}
 %
-Since $u_i$ are not all zero, the diagonal elements are $<0$. So we have proven that if we find a maximum it is the global maximum. The maximum likelihood estimators are found numerically in the following code.
+So we have proven that if we find a maximum it is the global maximum. The maximum likelihood estimators are found numerically in the following code.
 
 <<p3_4, eval=FALSE>>=
 @
